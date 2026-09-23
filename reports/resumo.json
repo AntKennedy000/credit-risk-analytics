@@ -1,0 +1,82 @@
+{
+  "executado_em_utc": "2026-09-22T23:14:24.893162+00:00",
+  "seed": 42,
+  "fonte": "https://doi.org/10.24432/C55S3H",
+  "sha256_origem": "56c885f84457f6680f8438f02bfcdac9579323d8a94465ee5f26e32baa727602",
+  "linhas": 30000,
+  "perfis_repetidos_apos_primeiro": 817,
+  "inadimplentes": 6636,
+  "prevalencia": 0.2212,
+  "particoes": {
+    "treino": {
+      "clientes": 18004,
+      "inadimplentes": 3984,
+      "prevalencia": 0.22128415907576093
+    },
+    "validacao": {
+      "clientes": 5998,
+      "inadimplentes": 1326,
+      "prevalencia": 0.22107369123041012
+    },
+    "teste": {
+      "clientes": 5998,
+      "inadimplentes": 1326,
+      "prevalencia": 0.22107369123041012
+    }
+  },
+  "modelo_selecionado": "XGBoost calibrado",
+  "criterio": "Menor Brier na validação",
+  "limiar_alerta": 0.255,
+  "criterio_limiar": "Maior F1 na validação; grade fixa 0,05–0,80",
+  "teste": {
+    "roc_auc": 0.793362046478233,
+    "average_precision": 0.5757152993026944,
+    "brier": 0.13184530492092528,
+    "log_loss": 0.42259251054049624,
+    "ks": 0.45873687989421263,
+    "gini": 0.5867240929564661,
+    "precision": 0.5400874635568513,
+    "recall": 0.5588235294117647,
+    "f1": 0.5492957746478874,
+    "tn": 4041,
+    "fp": 631,
+    "fn": 585,
+    "tp": 741
+  },
+  "psi_validacao_teste": 0.004397029405169498,
+  "atributos": [
+    "LIMIT_BAL",
+    "BILL_AMT1",
+    "BILL_AMT2",
+    "BILL_AMT3",
+    "BILL_AMT4",
+    "BILL_AMT5",
+    "BILL_AMT6",
+    "PAY_AMT1",
+    "PAY_AMT2",
+    "PAY_AMT3",
+    "PAY_AMT4",
+    "PAY_AMT5",
+    "PAY_AMT6",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_4",
+    "PAY_5",
+    "PAY_6",
+    "utilizacao_limite",
+    "pagamento_sobre_fatura",
+    "meses_com_atraso",
+    "maior_atraso"
+  ],
+  "ambiente": {
+    "python": "3.12.14",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "matplotlib": "3.11.2",
+    "xlrd": "2.0.2",
+    "joblib": "1.6.0"
+  }
+}

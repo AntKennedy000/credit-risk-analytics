@@ -1,0 +1,47 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Credit Risk Analytics — resultados</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#17243a;font:16px/1.6 system-ui,sans-serif}
+main{max-width:1180px;margin:auto;padding:32px}header{background:#17243a;color:white;border-top:6px solid #ba2444;padding:30px;border-radius:12px}
+h1{font-size:36px;line-height:1.15;margin:12px 0}h2{font-size:23px}header p{max-width:800px;color:#d5ddea}.tag{font-size:12px;letter-spacing:2px;color:#ffc4ce}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}article,section{background:white;border:1px solid #e0e5ec;border-radius:12px;padding:24px;margin-bottom:20px}article{margin:0}article span{display:block;color:#667085;font-size:14px}strong{font-size:32px;display:block}
+img{width:100%;height:auto}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:12px;text-align:left;border-bottom:1px solid #e7eaf0}th{background:#f6f7fa}.table{overflow:auto}
+.small{font-size:14px;color:#667085}select{padding:10px;font-size:16px;margin:0 12px;border:1px solid #a51636;border-radius:6px}output{display:block;padding:16px 0;font-size:18px;color:#8b1530}a{color:#a51636}footer{padding:20px 0;font-size:14px}
+@media(max-width:700px){main{padding:16px}.cards{grid-template-columns:repeat(2,1fr)}h1{font-size:28px}header,section{padding:20px}strong{font-size:27px}}
+</style><main><header><div class="tag">PORTFÓLIO • EXPERIMENTO REPRODUZÍVEL</div><h1>Credit Risk Analytics</h1><p>Modelagem de inadimplência e análise de risco comportamental em uma base pública de cartões de crédito.</p><p>Modelo selecionado: <b>XGBoost calibrado</b> · Menor Brier na validação.</p></header>
+<div class="cards"><article><span>Clientes no teste</span><strong>5.998</strong></article><article><span>ROC AUC</span><strong>0,793</strong></article><article><span>Brier</span><strong>0,132</strong></article><article><span>KS</span><strong>45,9%</strong></article></div>
+<section><h2>Qual modelo estimou melhor as probabilidades?</h2><p>Comparação na validação. O conjunto de teste foi reservado para a avaliação final do modelo escolhido.</p><div class="table"><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Modelo</th>
+      <th>Brier ↓</th>
+      <th>ROC AUC ↑</th>
+      <th>AP ↑</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>XGBoost calibrado</td>
+      <td>0,1409</td>
+      <td>0,7633</td>
+      <td>0,5211</td>
+    </tr>
+    <tr>
+      <td>Regressao Logistica</td>
+      <td>0,1419</td>
+      <td>0,7493</td>
+      <td>0,5045</td>
+    </tr>
+    <tr>
+      <td>Referencia</td>
+      <td>0,1722</td>
+      <td>0,5000</td>
+      <td>0,2211</td>
+    </tr>
+  </tbody>
+</table></div></section>
+<section><h2>Resultado no teste reservado</h2><img src="../evidencias/01-avaliacao-modelo.png" alt="Curvas ROC, precisão e recall e calibração do modelo selecionado"><p class="small">AUC mede ordenação; Brier mede erro das probabilidades. Bons resultados nesta amostra não demonstram desempenho futuro.</p></section>
+<section><h2>Como o corte de risco altera o grupo elegível?</h2><label for="cutoff">PD máxima ilustrativa</label><select id="cutoff"><option value="0">10%</option><option value="1">20%</option><option value="2">30%</option><option value="3">40%</option></select><output id="scenario" aria-live="polite"></output><p class="small">Simulação retrospectiva com clientes existentes. Elegibilidade não significa aprovação, contratação ou rentabilidade. Os quatro cortes foram fixados antes da avaliação.</p><img src="../evidencias/02-carteira-cenarios.png" alt="Faixas de risco e cenários de elegibilidade"></section>
+<section><h2>Quais variáveis ajudam a previsão?</h2><img src="../evidencias/03-importancia-validacao.png" alt="Importância por permutação calculada na validação"><p class="small">A permutação mede dependência preditiva. Variáveis correlacionadas podem dividir importância; o gráfico não demonstra causalidade.</p></section>
+<section><h2>O que estes resultados permitem concluir?</h2><p>O experimento compara modelos e descreve o equilíbrio entre elegibilidade e inadimplência observada. Usa dados históricos de Taiwan, de 2005, com desfecho no mês seguinte.</p><p>Não há validação temporal, dados brasileiros, custos de concessão, LGD ou recuperação. O limite de crédito em NT$ não foi tratado como saldo devedor. O PSI compara validação e teste da mesma fotografia: não é monitoramento temporal.</p><p><a href="resumo.json">Resultados e versões</a> · <a href="comparacao_validacao.csv">Comparação em CSV</a> · <a href="faixas_risco.csv">Indicadores SQL</a> · <a href="../README.md">Documentação</a></p></section>
+<footer>Antony Kennedy Ribeiro de Araújo · Projeto autoral educacional · Fonte: <a href="https://doi.org/10.24432/C55S3H">UCI / I-Cheng Yeh</a>, CC BY 4.0. Sem vínculo institucional com Bradesco ou DIO.</footer></main>
+<script>const scenarios=[{"limite_pd": 0.1, "elegiveis": 1405, "taxa_elegibilidade": 0.2342447482494164, "inadimplentes_elegiveis": 71, "taxa_inadimplencia_elegiveis": 0.0505338078291814, "pd_media_elegiveis": 0.0881673135739789}, {"limite_pd": 0.2, "elegiveis": 4216, "taxa_elegibilidade": 0.7029009669889963, "inadimplentes_elegiveis": 473, "taxa_inadimplencia_elegiveis": 0.1121916508538899, "pd_media_elegiveis": 0.1199101466359331}, {"limite_pd": 0.3, "elegiveis": 4867, "taxa_elegibilidade": 0.8114371457152384, "inadimplentes_elegiveis": 664, "taxa_inadimplencia_elegiveis": 0.1364290117115266, "pd_media_elegiveis": 0.13620408579894}, {"limite_pd": 0.4, "elegiveis": 5098, "taxa_elegibilidade": 0.8499499833277759, "inadimplentes_elegiveis": 750, "taxa_inadimplencia_elegiveis": 0.1471165162808944, "pd_media_elegiveis": 0.1456029065544358}];const select=document.getElementById('cutoff');const pct=v=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';function update(){const s=scenarios[Number(select.value)];document.getElementById('scenario').textContent=`${s.elegiveis.toLocaleString('pt-BR')} clientes elegíveis (${pct(s.taxa_elegibilidade)}) · inadimplência observada: ${s.taxa_inadimplencia_elegiveis===null?'sem clientes':pct(s.taxa_inadimplencia_elegiveis)}`;}select.addEventListener('change',update);update();</script></html>
