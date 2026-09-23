@@ -1,0 +1,12 @@
+// Criar cada medida separadamente, na tabela Carteira.
+Clientes = COUNTROWS(Carteira)
+
+Inadimplentes = SUM(Carteira[inadimplente])
+
+Taxa Inadimplencia = DIVIDE([Inadimplentes], [Clientes])
+
+PD Media = AVERAGE(Carteira[pd_estimada])
+
+Limite Total NTD = SUM(Carteira[limite_ntd])
+
+Limite Medio NTD = AVERAGE(Carteira[limite_ntd])
