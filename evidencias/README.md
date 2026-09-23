@@ -14,6 +14,8 @@ Para regenerar somente os gráficos e o painel, preservando o modelo e as previs
 .\.venv\Scripts\python.exe -m src.report
 ```
 
-`reports/verificacao.txt` registra os 12 testes executados localmente após o treino. A automação de GitHub Actions está configurada, mas não foi executada remotamente nesta entrega; testes dependentes dos artefatos são ignorados em ambientes que ainda não rodaram o treino.
+`reports/verificacao.txt` registra os 12 testes executados localmente após o treino, todos aprovados.
+
+A [execução no GitHub Actions em 23/09/2026](https://github.com/AntKennedy000/credit-risk-analytics/actions/runs/35852845403) também foi concluída com sucesso: oito testes executados e aprovados; quatro testes de integração ignorados porque dependem dos artefatos gerados pelo treinamento local. Isso não representa um novo treinamento na nuvem. O workflow possui apenas permissão de leitura e não grava alterações no repositório.
 
 O painel foi aberto no navegador e o cenário de 20% foi conferido: 4.216 elegíveis, 70,3% de elegibilidade e 11,2% de inadimplência observada entre elegíveis. Esses números correspondem ao CSV de cenários, com arredondamento de exibição.
