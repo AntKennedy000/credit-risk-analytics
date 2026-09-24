@@ -136,10 +136,13 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 .\.venv\Scripts\python.exe -m src.train
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
 Start-Process .\reports\painel.html
 ```
 
 No Linux/macOS, use `.venv/bin/python` no lugar de `.venv\Scripts\python.exe`. `requirements.txt` fixa as dependências diretas; `requirements-lock.txt` registra todo o ambiente usado na execução.
+
+Antes do treinamento, quatro testes de integração são ignorados porque o modelo e os dados processados ainda não existem. A segunda execução dos testes, após treinar, verifica também esses artefatos. A suíte inclui cenários sem clientes elegíveis, apresentados como informação ausente, nunca como taxa de inadimplência zero.
 
 A primeira execução precisa acessar a UCI. Execuções seguintes reutilizam o ZIP baixado e regeneram relatórios, banco e modelo. O download fica em `data/raw/uci_credit.zip`.
 
@@ -160,6 +163,7 @@ O exemplo é fictício e serve para verificar a inferência. A previsão não po
 - JSON com fonte, hash, partições e versões;
 - Testes de contrato dos dados, grupos disjuntos, métricas e limites dos cenários;
 - [Registro da verificação local](reports/verificacao.txt).
+- [Revisão final do projeto](docs/05-revisao-final.md), incluindo a correção de cenários sem elegíveis e 15 testes locais aprovados.
 
 ## Limitações
 
