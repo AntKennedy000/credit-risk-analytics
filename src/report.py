@@ -40,10 +40,15 @@ def render_reports(summary, validation, bands, scenarios, importances, y, p):
     axes[0].bar(positions+.18, bands.taxa_inadimplencia*100, .36, color=RED, label='Observada')
     axes[0].set_xticks(positions, bands.faixa_risco)
     axes[0].set(title='Risco por faixa', ylabel='Percentual (%)'); axes[0].legend()
-    axes[1].plot(scenarios.taxa_elegibilidade*100, scenarios.taxa_inadimplencia_elegiveis*100, 'o-', color=RED)
-    for row in scenarios.itertuples():
+    eligible_scenarios = scenarios.loc[scenarios.elegiveis > 0]
+    axes[1].plot(eligible_scenarios.taxa_elegibilidade*100,
+        eligible_scenarios.taxa_inadimplencia_elegiveis*100, 'o-', color=RED)
+    for row in eligible_scenarios.itertuples():
         axes[1].annotate(f'PD ≤ {row.limite_pd:.0%}', (row.taxa_elegibilidade*100, row.taxa_inadimplencia_elegiveis*100),
             xytext=(3,7), textcoords='offset points', fontsize=9)
+    if eligible_scenarios.empty:
+        axes[1].text(.5, .5, 'Nenhum cliente elegível nos cortes avaliados',
+            transform=axes[1].transAxes, ha='center', va='center', fontsize=9)
     axes[1].set(title='Cenários ilustrativos de elegibilidade', xlabel='Clientes elegíveis (%)', ylabel='Inadimplência entre elegíveis (%)')
     axes[1].margins(.18)
     fig.suptitle('Carteira de teste | Clientes existentes • Taiwan, 2005', fontsize=16, weight='bold')
@@ -77,7 +82,8 @@ def render_markdown(summary, validation, scenarios):
     lines += ['', '## Cenários fixos no teste', '',
         '| Corte PD | Elegíveis | Elegibilidade | Inadimplência entre elegíveis |', '|---|---:|---:|---:|']
     for row in scenarios.itertuples():
-        lines.append(f'| {row.limite_pd:.0%} | {row.elegiveis} | {row.taxa_elegibilidade:.2%} | {row.taxa_inadimplencia_elegiveis:.2%} |')
+        observed_rate = f'{row.taxa_inadimplencia_elegiveis:.2%}' if row.elegiveis else 'Sem elegíveis'
+        lines.append(f'| {row.limite_pd:.0%} | {row.elegiveis} | {row.taxa_elegibilidade:.2%} | {observed_rate} |')
     lines += ['', 'Os cortes são ilustrativos e não foram otimizados pelo teste. Não há conclusão sobre rentabilidade ou política ideal.', '',
         f"PSI entre validação e teste: **{summary['psi_validacao_teste']:.5f}**. É uma comparação entre amostras da mesma fotografia, não evidência de monitoramento temporal.", '',
         'Consulte a metodologia e as limitações no README antes de interpretar estes resultados.', '']
@@ -92,7 +98,8 @@ def render_dashboard(summary, validation, bands, scenarios):
     validation_html = validation[['modelo','brier','roc_auc','average_precision']].rename(
         columns={'modelo':'Modelo','brier':'Brier ↓','roc_auc':'ROC AUC ↑','average_precision':'AP ↑'}
         ).to_html(index=False, float_format=lambda v:f'{v:.4f}'.replace('.',','), border=0)
-    scenario_records = scenarios.to_dict(orient='records')
+    # Mixed populated/empty scenarios become NaN in pandas; JSON requires null.
+    scenario_records = scenarios.astype(object).where(scenarios.notna(), None).to_dict(orient='records')
     import json
     template = '''<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Credit Risk Analytics — resultados</title><style>
