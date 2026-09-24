@@ -10,8 +10,11 @@ test_perfect_predictions (test_pipeline.PipelineTests.test_perfect_predictions) 
 test_policy_boundaries_and_empty_population (test_pipeline.PipelineTests.test_policy_boundaries_and_empty_population) ... ok
 test_psi_identity_and_extreme_probabilities (test_pipeline.PipelineTests.test_psi_identity_and_extreme_probabilities) ... ok
 test_threshold_uses_supplied_validation (test_pipeline.PipelineTests.test_threshold_uses_supplied_validation) ... ok
+test_dashboard_serializes_empty_scenarios_as_null (test_reports.ReportTests.test_dashboard_serializes_empty_scenarios_as_null) ... ok
+test_full_report_renders_when_no_cutoff_has_clients (test_reports.ReportTests.test_full_report_renders_when_no_cutoff_has_clients) ... ok
+test_markdown_distinguishes_no_clients_from_zero_defaults (test_reports.ReportTests.test_markdown_distinguishes_no_clients_from_zero_defaults) ... ok
 
 ----------------------------------------------------------------------
-Ran 12 tests in 2.045s
+Ran 15 tests in 4.376s
 
 OK
